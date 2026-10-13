@@ -1,0 +1,3561 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="全方位創作與學業進度管理看板 - 整合學校作業、委託案追蹤與靈感記事本，支援手機與電腦跨平台使用。">
+  <meta name="theme-color" content="#4f46e5">
+  <title>進度與靈感工作台 | 學校作業・委託管理・靈感記事本</title>
+
+  <!-- Google Fonts: Inter & Noto Sans TC -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* ===================================================================
+   Task & Studio Hub - 創作與學業進度看板
+   全平台響應式設計系統 (支援電腦與手機)
+   =================================================================== */
+
+    :root {
+      /* 基礎配色 (淺色模式預設) */
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-card-subtle: #f1f5f9;
+      --bg-hover: #f1f5f9;
+      --border-color: #e2e8f0;
+      --border-focus: #6366f1;
+
+      /* 文字色彩 */
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-subtle: #94a3b8;
+      --text-inverse: #ffffff;
+
+      /* 主題語意色 */
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #eef2ff;
+      --primary-border: #c7d2fe;
+
+      /* 第一區：學校作業色彩 */
+      --hw-theme: #6366f1;
+      --hw-bg: #eef2ff;
+      --hw-border: #c7d2fe;
+      --hw-text: #3730a3;
+
+      /* 第二區：委託色彩 */
+      --comm-theme: #0d9488;
+      --comm-bg: #f0fdfa;
+      --comm-border: #99f6e4;
+      --comm-text: #115e59;
+
+      /* 第三區：靈感題材色彩 */
+      --idea-theme: #d97706;
+      --idea-bg: #fffbeb;
+      --idea-border: #fde68a;
+      --idea-text: #92400e;
+
+      /* 狀態反饋色彩 */
+      --success: #10b981;
+      --success-bg: #ecfdf5;
+      --success-border: #a7f3d0;
+      --success-text: #065f46;
+
+      --warning: #f59e0b;
+      --warning-bg: #fffbeb;
+      --warning-border: #fde68a;
+      --warning-text: #b45309;
+
+      --danger: #ef4444;
+      --danger-bg: #fef2f2;
+      --danger-border: #fecaca;
+      --danger-text: #991b1b;
+
+      --info: #0284c7;
+      --info-bg: #f0f9ff;
+      --info-border: #bae6fd;
+      --info-text: #0369a1;
+
+      /* 視覺陰影與圓角 */
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+      --shadow-hover: 0 12px 20px -3px rgba(0, 0, 0, 0.12), 0 6px 8px -4px rgba(0, 0, 0, 0.06);
+
+      --font-family: 'Inter', 'Noto Sans TC', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --transition-fast: 0.18s ease;
+      --transition-normal: 0.25s ease;
+    }
+
+    /* 深色模式變數覆蓋 */
+    [data-theme="dark"] {
+      --bg-main: #0b0f19;
+      --bg-card: #151d2f;
+      --bg-card-subtle: #1c263c;
+      --bg-hover: #222f4b;
+      --border-color: #243049;
+      --border-focus: #818cf8;
+
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-subtle: #64748b;
+      --text-inverse: #0f172a;
+
+      --primary: #6366f1;
+      --primary-hover: #818cf8;
+      --primary-light: #1e1e38;
+      --primary-border: #312e81;
+
+      --hw-theme: #818cf8;
+      --hw-bg: #1e1b4b;
+      --hw-border: #3730a3;
+      --hw-text: #c7d2fe;
+
+      --comm-theme: #2dd4bf;
+      --comm-bg: #042f2e;
+      --comm-border: #115e59;
+      --comm-text: #99f6e4;
+
+      --idea-theme: #fbbf24;
+      --idea-bg: #451a03;
+      --idea-border: #78350f;
+      --idea-text: #fde68a;
+
+      --success: #34d399;
+      --success-bg: #064e3b;
+      --success-border: #047857;
+      --success-text: #a7f3d0;
+
+      --warning: #fbbf24;
+      --warning-bg: #78350f;
+      --warning-border: #b45309;
+      --warning-text: #fef3c7;
+
+      --danger: #f87171;
+      --danger-bg: #7f1d1d;
+      --danger-border: #991b1b;
+      --danger-text: #fecaca;
+
+      --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 8px -1px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 12px 20px -3px rgba(0, 0, 0, 0.5);
+      --shadow-hover: 0 16px 25px -4px rgba(0, 0, 0, 0.6);
+    }
+
+    /* 基礎重設 */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      font-family: var(--font-family);
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.5;
+      transition: background-color var(--transition-normal), color var(--transition-normal);
+    }
+
+    body {
+      padding-bottom: 70px;
+      /* 給手機底部導航預留空間 */
+    }
+
+    @media (min-width: 769px) {
+      body {
+        padding-bottom: 30px;
+      }
+    }
+
+    /* ===================================================================
+   頂部導航區
+   =================================================================== */
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-color);
+      transition: background-color var(--transition-normal), border-color var(--transition-normal);
+    }
+
+    [data-theme="dark"] .app-header {
+      background-color: rgba(21, 29, 47, 0.85);
+    }
+
+    .header-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+    }
+
+    .logo-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .logo-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* 搜尋列 */
+    .search-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-box input {
+      width: 180px;
+      height: 38px;
+      padding: 0 32px 0 34px;
+      font-size: 0.875rem;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-card);
+      color: var(--text-main);
+      transition: all var(--transition-fast);
+      outline: none;
+    }
+
+    .search-box input:focus {
+      width: 240px;
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 11px;
+      color: var(--text-subtle);
+      pointer-events: none;
+    }
+
+    .clear-search-btn {
+      position: absolute;
+      right: 10px;
+      background: none;
+      border: none;
+      color: var(--text-subtle);
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 0;
+      line-height: 1;
+    }
+
+    @media (max-width: 640px) {
+      .logo-subtitle {
+        display: none;
+      }
+
+      .search-box input {
+        width: 120px;
+      }
+
+      .search-box input:focus {
+        width: 160px;
+      }
+    }
+
+    /* 圖示按鈕 */
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-card);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .icon-btn:hover {
+      color: var(--text-main);
+      background-color: var(--bg-hover);
+      border-color: var(--border-focus);
+    }
+
+    /* 下拉選單 */
+    .dropdown-wrapper {
+      position: relative;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 8px);
+      min-width: 180px;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      padding: 6px;
+      display: none;
+      flex-direction: column;
+      z-index: 200;
+      animation: fadeInDown 0.18s ease;
+    }
+
+    .dropdown-menu.show {
+      display: flex;
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border: none;
+      background: none;
+      color: var(--text-main);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      text-align: left;
+      transition: background-color var(--transition-fast);
+    }
+
+    .dropdown-item:hover {
+      background-color: var(--bg-hover);
+    }
+
+    .dropdown-divider {
+      height: 1px;
+      background-color: var(--border-color);
+      margin: 4px 0;
+    }
+
+    .text-danger {
+      color: var(--danger) !important;
+    }
+
+    /* ===================================================================
+   主內容佈局
+   =================================================================== */
+    .main-wrapper {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 20px 20px;
+    }
+
+    /* ===================================================================
+   頂部數據統計總覽看板
+   =================================================================== */
+    .stats-overview {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: var(--shadow-sm);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .stat-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .homework-accent {
+      background-color: var(--hw-bg);
+      color: var(--hw-theme);
+    }
+
+    .commission-accent {
+      background-color: var(--comm-bg);
+      color: var(--comm-theme);
+    }
+
+    .finance-accent {
+      background-color: var(--success-bg);
+      color: var(--success);
+    }
+
+    .ideas-accent {
+      background-color: var(--idea-bg);
+      color: var(--idea-theme);
+    }
+
+    .stat-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .stat-value-group {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .stat-main-num {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.1;
+    }
+
+    .stat-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* ===================================================================
+   分頁標籤導航 (View Tabs)
+   =================================================================== */
+    .view-tabs-container {
+      margin-bottom: 20px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .view-tabs-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .view-tabs {
+      display: flex;
+      gap: 8px;
+      background-color: var(--bg-card-subtle);
+      padding: 4px;
+      border-radius: var(--radius-full);
+      width: fit-content;
+      border: 1px solid var(--border-color);
+    }
+
+    .view-tab-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all var(--transition-fast);
+    }
+
+    .view-tab-btn:hover {
+      color: var(--text-main);
+    }
+
+    .view-tab-btn.active {
+      background-color: var(--bg-card);
+      color: var(--text-main);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .dot-homework {
+      background-color: var(--hw-theme);
+    }
+
+    .dot-commission {
+      background-color: var(--comm-theme);
+    }
+
+    .dot-ideas {
+      background-color: var(--idea-theme);
+    }
+
+    /* ===================================================================
+   三大核心看板網格佈局 (Three-Section Board)
+   =================================================================== */
+    .three-sections-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .three-sections-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+    }
+
+    /* 欄位看板基礎卡片 */
+    .board-column {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-height: 480px;
+      transition: box-shadow var(--transition-fast);
+    }
+
+    .column-header {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .column-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-homework {
+      background-color: var(--hw-bg);
+      color: var(--hw-text);
+      border: 1px solid var(--hw-border);
+    }
+
+    .badge-commission {
+      background-color: var(--comm-bg);
+      color: var(--comm-text);
+      border: 1px solid var(--comm-border);
+    }
+
+    .badge-ideas {
+      background-color: var(--idea-bg);
+      color: var(--idea-text);
+      border: 1px solid var(--idea-border);
+    }
+
+    .column-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .counter-pill {
+      margin-left: auto;
+      background-color: var(--bg-card-subtle);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+    }
+
+    .column-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .filter-select {
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-card-subtle);
+      color: var(--text-main);
+      outline: none;
+      cursor: pointer;
+      transition: border-color var(--transition-fast);
+    }
+
+    .filter-select:focus {
+      border-color: var(--border-focus);
+    }
+
+    .section-notice {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background-color: var(--bg-card-subtle);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      border-left: 3px solid var(--primary);
+    }
+
+    /* ===================================================================
+   按鈕系統
+   =================================================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .btn-xs {
+      padding: 4px 8px;
+      font-size: 0.75rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+      box-shadow: 0 4px 10px rgba(79, 70, 229, 0.25);
+    }
+
+    .btn-commission-theme {
+      background-color: var(--comm-theme);
+    }
+
+    .btn-commission-theme:hover {
+      background-color: #0f766e;
+      box-shadow: 0 4px 10px rgba(13, 148, 136, 0.25);
+    }
+
+    .btn-ideas-theme {
+      background-color: var(--idea-theme);
+    }
+
+    .btn-ideas-theme:hover {
+      background-color: #b45309;
+      box-shadow: 0 4px 10px rgba(217, 119, 6, 0.25);
+    }
+
+    .btn-secondary {
+      background-color: var(--bg-card-subtle);
+      border-color: var(--border-color);
+      color: var(--text-main);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--bg-hover);
+    }
+
+    .btn-ghost {
+      background-color: transparent;
+      color: var(--text-muted);
+    }
+
+    .btn-ghost:hover {
+      background-color: var(--bg-hover);
+      color: var(--text-main);
+    }
+
+    /* ===================================================================
+   即時速記記事本 (Scratchpad)
+   =================================================================== */
+    .quick-scratchpad {
+      background-color: var(--idea-bg);
+      border: 1px dashed var(--idea-border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .scratchpad-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .scratchpad-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--idea-text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .save-status-text {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .quick-scratchpad textarea {
+      width: 100%;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background-color: var(--bg-card);
+      color: var(--text-main);
+      padding: 8px 10px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 60px;
+      outline: none;
+      transition: border-color var(--transition-fast);
+    }
+
+    .quick-scratchpad textarea:focus {
+      border-color: var(--idea-theme);
+    }
+
+    .scratchpad-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* ===================================================================
+   項目列表與卡片設計 (Items List & Cards)
+   =================================================================== */
+    .items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex-grow: 1;
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 36px 16px;
+      color: var(--text-subtle);
+      background-color: var(--bg-card-subtle);
+      border-radius: var(--radius-md);
+      border: 1px dashed var(--border-color);
+    }
+
+    .empty-state-icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+      opacity: 0.8;
+    }
+
+    .empty-state-text {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .empty-state-subtext {
+      font-size: 0.75rem;
+      color: var(--text-subtle);
+      margin-top: 4px;
+    }
+
+    /* 核心卡片通用樣式 */
+    .item-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-normal);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .item-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--primary-border);
+    }
+
+    /* 已完成完稿狀態 */
+    .item-card.is-completed {
+      background-color: var(--bg-card-subtle);
+      border-color: var(--border-color);
+      opacity: 0.8;
+    }
+
+    .item-card.is-completed .card-title {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    /* 卡片頭部：打勾方格與標題 */
+    .card-header-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    /* 自訂方格打勾元件 (重要功能：確認是否完稿結束) */
+    .completion-check-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      cursor: pointer;
+    }
+
+    .completion-check-box input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--border-color);
+      border-radius: 6px;
+      outline: none;
+      background-color: var(--bg-card);
+      cursor: pointer;
+      display: grid;
+      place-content: center;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .completion-check-box input[type="checkbox"]:hover {
+      border-color: var(--primary);
+    }
+
+    .completion-check-box input[type="checkbox"]::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      transform: scale(0);
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: inset 1em 1em #ffffff;
+      clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+      background-color: #ffffff;
+    }
+
+    .completion-check-box input[type="checkbox"]:checked {
+      background-color: var(--success);
+      border-color: var(--success);
+      animation: checkPulse 0.3s ease;
+    }
+
+    .completion-check-box input[type="checkbox"]:checked::before {
+      transform: scale(1);
+    }
+
+    @keyframes checkPulse {
+      0% {
+        transform: scale(0.9);
+      }
+
+      50% {
+        transform: scale(1.15);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .card-title-content {
+      flex-grow: 1;
+      min-width: 0;
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .card-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* 狀態徽章與標籤 */
+    .badge-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .badge-deadline {
+      background-color: var(--bg-card-subtle);
+      color: var(--text-muted);
+      border-color: var(--border-color);
+    }
+
+    .badge-urgent {
+      background-color: var(--danger-bg);
+      color: var(--danger-text);
+      border-color: var(--danger-border);
+      font-weight: 700;
+      animation: pulseLight 2s infinite ease-in-out;
+    }
+
+    .badge-warning {
+      background-color: var(--warning-bg);
+      color: var(--warning-text);
+      border-color: var(--warning-border);
+    }
+
+    .badge-completed {
+      background-color: var(--success-bg);
+      color: var(--success-text);
+      border-color: var(--success-border);
+    }
+
+    /* 匯款狀態標籤 (可點擊快速切換) */
+    .badge-payment {
+      cursor: pointer;
+      user-select: none;
+      transition: transform var(--transition-fast);
+    }
+
+    .badge-payment:hover {
+      transform: scale(1.05);
+    }
+
+    .payment-unpaid {
+      background-color: var(--danger-bg);
+      color: var(--danger-text);
+      border-color: var(--danger-border);
+    }
+
+    .payment-deposit {
+      background-color: var(--warning-bg);
+      color: var(--warning-text);
+      border-color: var(--warning-border);
+    }
+
+    .payment-paid {
+      background-color: var(--success-bg);
+      color: var(--success-text);
+      border-color: var(--success-border);
+    }
+
+    .badge-price {
+      background-color: var(--comm-bg);
+      color: var(--comm-text);
+      border-color: var(--comm-border);
+      font-weight: 700;
+    }
+
+    .badge-idea-tag {
+      background-color: var(--idea-bg);
+      color: var(--idea-text);
+      border-color: var(--idea-border);
+    }
+
+    /* 卡片內文區域 */
+    .card-body {
+      font-size: 0.85rem;
+      color: var(--text-main);
+      background-color: var(--bg-card-subtle);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      white-space: pre-wrap;
+      word-break: break-word;
+      line-height: 1.45;
+      max-height: 120px;
+      overflow-y: auto;
+    }
+
+    /* 進度條元件 (目前進度) */
+    .card-progress-section {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .progress-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .progress-label-text {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 7px;
+      background-color: var(--bg-card-subtle);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4f46e5 0%, #06b6d4 100%);
+      border-radius: var(--radius-full);
+      transition: width 0.4s ease;
+    }
+
+    .progress-bar-fill.comm-fill {
+      background: linear-gradient(90deg, #0d9488 0%, #10b981 100%);
+    }
+
+    .progress-bar-fill.completed-fill {
+      background: var(--success);
+    }
+
+    /* 卡片操作工具列 */
+    .card-footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 8px;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.75rem;
+      color: var(--text-subtle);
+    }
+
+    .card-actions-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: auto;
+    }
+
+    .card-action-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all var(--transition-fast);
+    }
+
+    .card-action-btn:hover {
+      background-color: var(--bg-hover);
+      color: var(--text-main);
+    }
+
+    .card-action-btn.btn-delete:hover {
+      background-color: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    /* ===================================================================
+   彈跳視窗系統 (Modal Dialogs)
+   =================================================================== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .modal-dialog {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      width: 100%;
+      max-width: 520px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: scaleUp 0.2s ease;
+    }
+
+    .modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .modal-close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      line-height: 1;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: var(--radius-sm);
+      transition: color var(--transition-fast);
+    }
+
+    .modal-close-btn:hover {
+      color: var(--text-main);
+    }
+
+    .modal-form {
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    @media (max-width: 540px) {
+      .form-row {
+        flex-direction: column;
+        gap: 16px;
+      }
+    }
+
+    .flex-1 {
+      flex: 1;
+    }
+
+    .form-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .form-label.required::after {
+      content: " *";
+      color: var(--danger);
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background-color: var(--bg-card);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      transition: all var(--transition-fast);
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+
+    .form-textarea {
+      resize: vertical;
+    }
+
+    .form-range {
+      width: 100%;
+      accent-color: var(--primary);
+      cursor: pointer;
+      height: 6px;
+    }
+
+    .form-checkbox-group {
+      background-color: var(--bg-card-subtle);
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+    }
+
+    .custom-checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      user-select: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    /* ===================================================================
+   手機端底部導航 (Mobile Bottom Nav)
+   =================================================================== */
+    .mobile-bottom-bar {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background-color: var(--bg-card);
+      border-top: 1px solid var(--border-color);
+      z-index: 100;
+      justify-content: space-around;
+      align-items: center;
+      padding: 0 10px;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .mobile-nav-item {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      transition: all var(--transition-fast);
+    }
+
+    .mobile-nav-item.active {
+      color: var(--primary);
+    }
+
+    @media (max-width: 768px) {
+      .mobile-bottom-bar {
+        display: flex;
+      }
+    }
+
+    /* ===================================================================
+   懸浮快速新增按鈕 (FAB)
+   =================================================================== */
+    .fab-container {
+      position: fixed;
+      right: 24px;
+      bottom: 80px;
+      z-index: 90;
+    }
+
+    @media (min-width: 769px) {
+      .fab-container {
+        bottom: 28px;
+      }
+    }
+
+    .fab-button {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      color: #ffffff;
+      border: none;
+      box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .fab-button:hover {
+      transform: scale(1.08);
+    }
+
+    .fab-button.active {
+      transform: rotate(45deg);
+    }
+
+    .fab-menu {
+      position: absolute;
+      right: 0;
+      bottom: 68px;
+      display: none;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    .fab-menu.show {
+      display: flex;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .fab-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .fab-item-label {
+      background-color: var(--bg-card);
+      color: var(--text-main);
+      padding: 6px 12px;
+      border-radius: var(--radius-md);
+      font-size: 0.8rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-color);
+    }
+
+    .fab-item-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .bg-hw {
+      background-color: var(--hw-bg);
+    }
+
+    .bg-comm {
+      background-color: var(--comm-bg);
+    }
+
+    .bg-idea {
+      background-color: var(--idea-bg);
+    }
+
+    /* ===================================================================
+   Toast 通知元件
+   =================================================================== */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    @media (max-width: 768px) {
+      .toast-container {
+        bottom: 74px;
+      }
+    }
+
+    .toast {
+      pointer-events: auto;
+      background-color: var(--bg-card);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 10px 18px;
+      border-radius: var(--radius-full);
+      box-shadow: var(--shadow-lg);
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: toastIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .toast.toast-success {
+      border-left: 4px solid var(--success);
+    }
+
+    .toast.toast-warning {
+      border-left: 4px solid var(--warning);
+    }
+
+    .toast.toast-error {
+      border-left: 4px solid var(--danger);
+    }
+
+    /* ===================================================================
+   動畫 Keyframes
+   =================================================================== */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes scaleUp {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.9);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes pulseLight {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.7;
+      }
+    }
+  </style>
+</head>
+
+<body data-theme="light">
+  <!-- 頂部應用程式導航 -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="logo-area">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+            <path d="M2 17l10 5 10-5"></path>
+            <path d="M2 12l10 5 10-5"></path>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <h1 class="logo-title">Task & Studio Hub</h1>
+          <p class="logo-subtitle">作業・委託・靈感一站式管理</p>
+        </div>
+      </div>
+
+      <!-- 頂部功能快捷鍵 -->
+      <div class="header-actions">
+        <div class="search-box">
+          <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="globalSearchInput" placeholder="搜尋作業、委託人、靈感..." aria-label="全域搜尋">
+          <button id="clearSearchBtn" class="clear-search-btn" title="清除搜尋" style="display: none;">×</button>
+        </div>
+
+        <button id="themeToggleBtn" class="icon-btn" title="切換深色/淺色模式" aria-label="切換外觀色彩">
+          <span class="theme-icon-light">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+          </span>
+          <span class="theme-icon-dark" style="display: none;">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </span>
+        </button>
+
+        <div class="dropdown-wrapper">
+          <button id="moreMenuBtn" class="icon-btn" title="資料備份與設定" aria-label="更多選項">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="1"></circle>
+              <circle cx="12" cy="5" r="1"></circle>
+              <circle cx="12" cy="19" r="1"></circle>
+            </svg>
+          </button>
+          <div id="moreMenuDropdown" class="dropdown-menu">
+            <button class="dropdown-item" id="exportDataBtn">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              匯出備份 (JSON)
+            </button>
+            <label class="dropdown-item file-upload-label" for="importFileInput">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              匯入備份
+              <input type="file" id="importFileInput" accept=".json" style="display: none;">
+            </label>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" id="loadSampleDataBtn">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+              </svg>
+              載入範例資料
+            </button>
+            <button class="dropdown-item text-danger" id="clearAllDataBtn">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+              清空所有資料
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主內容容器 -->
+  <main class="main-wrapper">
+    <!-- 頂部數據統計總覽看板 -->
+    <section class="stats-overview" aria-label="進度總覽數據">
+      <div class="stat-card" data-category="homework">
+        <div class="stat-icon homework-accent">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">學校作業</span>
+          <div class="stat-value-group">
+            <span class="stat-main-num" id="statHwPending">0</span>
+            <span class="stat-sub">進行中 / <span id="statHwDone">0</span> 完稿</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-card" data-category="commission">
+        <div class="stat-icon commission-accent">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">委託進行中</span>
+          <div class="stat-value-group">
+            <span class="stat-main-num" id="statCommPending">0</span>
+            <span class="stat-sub">件 / <span id="statCommDone">0</span> 件已結案</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-card" data-category="finance">
+        <div class="stat-icon finance-accent">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="1" x2="12" y2="23"></line>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">委託收款進度</span>
+          <div class="stat-value-group">
+            <span class="stat-main-num" id="statCommPaidAmount">$0</span>
+            <span class="stat-sub">已收 / 總計 <span id="statCommTotalAmount">$0</span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-card" data-category="ideas">
+        <div class="stat-icon ideas-accent">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18h6"></path>
+            <path d="M10 22h4"></path>
+            <path d="M12 2a7 7 0 0 0-7 7c0 2.5 1.5 4.5 3 6h8c1.5-1.5 3-3.5 3-6a7 7 0 0 0-7-7z"></path>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">靈感庫存</span>
+          <div class="stat-value-group">
+            <span class="stat-main-num" id="statIdeaCount">0</span>
+            <span class="stat-sub">則靈感創意</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 視圖切換標籤 (支援手機端與電腦端快速過濾) -->
+    <div class="view-tabs-container">
+      <nav class="view-tabs" role="tablist">
+        <button class="view-tab-btn active" data-tab="all" role="tab" aria-selected="true">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          全部三區總覽
+        </button>
+        <button class="view-tab-btn" data-tab="homework-sec" role="tab" aria-selected="false">
+          <span class="badge-dot dot-homework"></span>
+          第一區：學校作業
+        </button>
+        <button class="view-tab-btn" data-tab="commission-sec" role="tab" aria-selected="false">
+          <span class="badge-dot dot-commission"></span>
+          第二區：委託內容
+        </button>
+        <button class="view-tab-btn" data-tab="ideas-sec" role="tab" aria-selected="false">
+          <span class="badge-dot dot-ideas"></span>
+          第三區：靈感題材
+        </button>
+      </nav>
+    </div>
+
+    <!-- 三大核心區塊網格佈局 -->
+    <div class="three-sections-grid">
+
+      <!-- ================= 第一區：學校作業 ================= -->
+      <section class="board-column" id="homework-sec" aria-labelledby="homeworkSecTitle">
+        <div class="column-header">
+          <div class="column-title-group">
+            <div class="section-badge badge-homework">第 1 區</div>
+            <h2 id="homeworkSecTitle" class="column-title">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+              </svg>
+              學校作業
+            </h2>
+            <span class="counter-pill" id="homeworkCounter">0</span>
+          </div>
+          <div class="column-actions">
+            <select id="homeworkFilter" class="filter-select" aria-label="作業狀態篩選">
+              <option value="all">全部作業</option>
+              <option value="pending" selected>進行中</option>
+              <option value="completed">已完稿</option>
+            </select>
+            <button class="btn btn-primary btn-sm" id="openAddHomeworkBtn" aria-label="新增作業">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              新增作業
+            </button>
+          </div>
+        </div>
+
+        <div class="section-notice">
+          <span>💡 勾選方格可標記「完稿結束」並自動歸檔</span>
+        </div>
+
+        <!-- 作業清單列表 -->
+        <div class="items-list" id="homeworkList">
+          <!-- 動態渲染項目 -->
+        </div>
+      </section>
+
+      <!-- ================= 第二區：委託內容 ================= -->
+      <section class="board-column" id="commission-sec" aria-labelledby="commissionSecTitle">
+        <div class="column-header">
+          <div class="column-title-group">
+            <div class="section-badge badge-commission">第 2 區</div>
+            <h2 id="commissionSecTitle" class="column-title">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+              </svg>
+              委託內容
+            </h2>
+            <span class="counter-pill" id="commissionCounter">0</span>
+          </div>
+          <div class="column-actions">
+            <select id="commissionFilter" class="filter-select" aria-label="委託狀態篩選">
+              <option value="all">全部委託</option>
+              <option value="pending" selected>進行中</option>
+              <option value="unpaid">待收款項</option>
+              <option value="completed">已完稿</option>
+            </select>
+            <button class="btn btn-primary btn-sm btn-commission-theme" id="openAddCommissionBtn" aria-label="新增委託">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              新增委託
+            </button>
+          </div>
+        </div>
+
+        <div class="section-notice">
+          <span>💼 包含委託人、金額、匯款狀態與進度追蹤</span>
+        </div>
+
+        <!-- 委託清單列表 -->
+        <div class="items-list" id="commissionList">
+          <!-- 動態渲染項目 -->
+        </div>
+      </section>
+
+      <!-- ================= 第三區：靈感題材 ================= -->
+      <section class="board-column" id="ideas-sec" aria-labelledby="ideasSecTitle">
+        <div class="column-header">
+          <div class="column-title-group">
+            <div class="section-badge badge-ideas">第 3 區</div>
+            <h2 id="ideasSecTitle" class="column-title">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 18h6"></path>
+                <path d="M10 22h4"></path>
+                <path d="M12 2a7 7 0 0 0-7 7c0 2.5 1.5 4.5 3 6h8c1.5-1.5 3-3.5 3-6a7 7 0 0 0-7-7z"></path>
+              </svg>
+              靈感題材
+            </h2>
+            <span class="counter-pill" id="ideasCounter">0</span>
+          </div>
+          <div class="column-actions">
+            <select id="ideasFilter" class="filter-select" aria-label="靈感狀態篩選">
+              <option value="all">全部靈感</option>
+              <option value="active" selected>未完結</option>
+              <option value="completed">已採用/完稿</option>
+            </select>
+            <button class="btn btn-primary btn-sm btn-ideas-theme" id="openAddIdeaBtn" aria-label="新增靈感卡片">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              靈感卡片
+            </button>
+          </div>
+        </div>
+
+        <!-- 隨手記記事本快捷區 -->
+        <div class="quick-scratchpad">
+          <div class="scratchpad-header">
+            <span class="scratchpad-title">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+              </svg>
+              即時靈感速記簿（自動儲存）
+            </span>
+            <span class="save-status-text" id="scratchpadSaveStatus">已同步</span>
+          </div>
+          <textarea id="scratchpadInput" placeholder="腦海中有任何新點子、畫面、配色或分鏡？直接在此輸入，隨打隨存..." rows="3"></textarea>
+          <div class="scratchpad-actions">
+            <button id="convertScratchpadToCardBtn" class="btn btn-ghost btn-xs" title="將速記內容轉為獨立靈感卡片">
+              轉為卡片存檔 ➜
+            </button>
+            <button id="clearScratchpadBtn" class="btn btn-ghost btn-xs text-danger" title="清空速記簿">清空</button>
+          </div>
+        </div>
+
+        <!-- 靈感清單列表 -->
+        <div class="items-list" id="ideasList">
+          <!-- 動態渲染項目 -->
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- 手機端底部導航列 (在小螢幕時顯示) -->
+  <footer class="mobile-bottom-bar" role="navigation" aria-label="手機端底部快速選單">
+    <button class="mobile-nav-item active" data-nav="all">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
+      <span>總覽</span>
+    </button>
+    <button class="mobile-nav-item" data-nav="homework-sec">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+      </svg>
+      <span>作業</span>
+    </button>
+    <button class="mobile-nav-item" data-nav="commission-sec">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+      </svg>
+      <span>委託</span>
+    </button>
+    <button class="mobile-nav-item" data-nav="ideas-sec">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 18h6"></path>
+        <path d="M10 22h4"></path>
+        <path d="M12 2a7 7 0 0 0-7 7c0 2.5 1.5 4.5 3 6h8c1.5-1.5 3-3.5 3-6a7 7 0 0 0-7-7z"></path>
+      </svg>
+      <span>靈感</span>
+    </button>
+  </footer>
+
+  <!-- 懸浮快速新增按鈕 (FAB, 手機操作極佳體驗) -->
+  <div class="fab-container">
+    <button id="mainFabBtn" class="fab-button" title="快速新增" aria-label="快速新增項目">
+      <svg class="fab-icon-add" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+        stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+    </button>
+    <div id="fabMenu" class="fab-menu">
+      <button class="fab-menu-item" id="fabAddHomeworkBtn">
+        <span class="fab-item-label">新增學校作業</span>
+        <span class="fab-item-icon bg-hw">🎓</span>
+      </button>
+      <button class="fab-menu-item" id="fabAddCommissionBtn">
+        <span class="fab-item-label">新增委託案件</span>
+        <span class="fab-item-icon bg-comm">🎨</span>
+      </button>
+      <button class="fab-menu-item" id="fabAddIdeaBtn">
+        <span class="fab-item-label">新增靈感題材</span>
+        <span class="fab-item-icon bg-idea">💡</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= 彈跳視窗：學校作業 (新增/編輯) ================= -->
+  <div class="modal-overlay" id="homeworkModal" role="dialog" aria-modal="true" aria-labelledby="hwModalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="hwModalTitle" class="modal-title">新增學校作業</h3>
+        <button class="modal-close-btn" data-close-modal="homeworkModal" aria-label="關閉視窗">×</button>
+      </div>
+      <form id="homeworkForm" class="modal-form">
+        <input type="hidden" id="hwEditId">
+
+        <div class="form-group">
+          <label for="hwTitle" class="form-label required">作業名稱 / 內容大綱</label>
+          <input type="text" id="hwTitle" class="form-input" placeholder="例如：視覺傳達期末大作業、英文簡報投影片" required>
+        </div>
+
+        <div class="form-group">
+          <label for="hwDeadline" class="form-label required">截止時間</label>
+          <input type="datetime-local" id="hwDeadline" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+          <label for="hwContent" class="form-label">內容詳細說明</label>
+          <textarea id="hwContent" class="form-textarea" rows="3" placeholder="輸入作業規定、繳交格式、參考資料或重點清單..."></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="hwProgress" class="form-label">目前進度描述</label>
+            <input type="text" id="hwProgress" class="form-input" placeholder="例如：草案完成、進行至第 3 頁" value="未開始">
+          </div>
+          <div class="form-group flex-1">
+            <label for="hwProgressPercent" class="form-label">進度百分比 (<span id="hwPercentDisplay">0</span>%)</label>
+            <input type="range" id="hwProgressPercent" class="form-range" min="0" max="100" step="5" value="0">
+          </div>
+        </div>
+
+        <div class="form-checkbox-group">
+          <label class="custom-checkbox-label">
+            <input type="checkbox" id="hwIsCompleted">
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">確認完稿結束 (打勾標記為已完成)</span>
+          </label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal="homeworkModal">取消</button>
+          <button type="submit" class="btn btn-primary">儲存作業</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= 彈跳視窗：委託內容 (新增/編輯) ================= -->
+  <div class="modal-overlay" id="commissionModal" role="dialog" aria-modal="true" aria-labelledby="commModalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="commModalTitle" class="modal-title">新增委託案件</h3>
+        <button class="modal-close-btn" data-close-modal="commissionModal" aria-label="關閉視窗">×</button>
+      </div>
+      <form id="commissionForm" class="modal-form">
+        <input type="hidden" id="commEditId">
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="commClient" class="form-label required">委託人名稱</label>
+            <input type="text" id="commClient" class="form-input" placeholder="例如：小美 (@mei_art)、王先生" required>
+          </div>
+          <div class="form-group flex-1">
+            <label for="commPrice" class="form-label">委託金額 (NT$)</label>
+            <input type="number" id="commPrice" class="form-input" placeholder="例如：3500" min="0" step="50">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="commContent" class="form-label required">委託內容</label>
+          <textarea id="commContent" class="form-textarea" rows="3" placeholder="例如：雙人全身彩色插圖、商業主視覺設計，含去背透明背景檔..."
+            required></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="commPaymentStatus" class="form-label required">是否匯款</label>
+            <select id="commPaymentStatus" class="form-select" required>
+              <option value="未匯款">❌ 未匯款</option>
+              <option value="已付訂金">⏳ 已付訂金 (50%)</option>
+              <option value="全額已付">✅ 全額已付</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label for="commDeadline" class="form-label required">截止時間 (交稿日)</label>
+            <input type="datetime-local" id="commDeadline" class="form-input" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="commProgress" class="form-label">目前進度描述</label>
+            <input type="text" id="commProgress" class="form-input" placeholder="例如：草稿構圖、線稿確認中、上色細化中" value="草稿發想">
+          </div>
+          <div class="form-group flex-1">
+            <label for="commProgressPercent" class="form-label">進度百分比 (<span id="commPercentDisplay">10</span>%)</label>
+            <input type="range" id="commProgressPercent" class="form-range" min="0" max="100" step="5" value="10">
+          </div>
+        </div>
+
+        <div class="form-checkbox-group">
+          <label class="custom-checkbox-label">
+            <input type="checkbox" id="commIsCompleted">
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">確認完稿結束 (打勾標記為已完稿交件)</span>
+          </label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal="commissionModal">取消</button>
+          <button type="submit" class="btn btn-primary btn-commission-theme">儲存委託</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= 彈跳視窗：靈感題材 (新增/編輯卡片) ================= -->
+  <div class="modal-overlay" id="ideaModal" role="dialog" aria-modal="true" aria-labelledby="ideaModalTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="ideaModalTitle" class="modal-title">新增靈感題材卡片</h3>
+        <button class="modal-close-btn" data-close-modal="ideaModal" aria-label="關閉視窗">×</button>
+      </div>
+      <form id="ideaForm" class="modal-form">
+        <input type="hidden" id="ideaEditId">
+
+        <div class="form-group">
+          <label for="ideaTitle" class="form-label required">靈感標題</label>
+          <input type="text" id="ideaTitle" class="form-input" placeholder="例如：科幻蒸氣龐克鐘錶少女、夜市賽博龐克世界觀" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="ideaTag" class="form-label">分類標籤</label>
+            <select id="ideaTag" class="form-select">
+              <option value="角色設定">👤 角色設定</option>
+              <option value="世界觀">🌌 世界觀構想</option>
+              <option value="分鏡構圖">📐 分鏡與構圖</option>
+              <option value="色彩氛圍">🎨 色彩氛圍</option>
+              <option value="故事短篇">📖 故事短篇</option>
+              <option value="隨筆隨想">💭 隨筆隨想</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label for="ideaCustomTag" class="form-label">自訂標籤 (可選)</label>
+            <input type="text" id="ideaCustomTag" class="form-input" placeholder="例如：個人私心、參賽企劃">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="ideaContent" class="form-label required">靈感內容 (記事本詳細紀錄)</label>
+          <textarea id="ideaContent" class="form-textarea" rows="4" placeholder="在此盡情記錄你的靈感、角色特徵、服裝配件、故事走向或視覺氛圍關鍵字..."
+            required></textarea>
+        </div>
+
+        <div class="form-checkbox-group">
+          <label class="custom-checkbox-label">
+            <input type="checkbox" id="ideaIsCompleted">
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">確認完稿結束 (打勾標記為已採用或已繪製完稿)</span>
+          </label>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal="ideaModal">取消</button>
+          <button type="submit" class="btn btn-primary btn-ideas-theme">儲存靈感卡片</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast 訊息提示元件 -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- JavaScript 核心邏輯 -->
+  <script>
+    /**
+     * Task & Studio Hub - 創作與學業進度看板
+     * 前端核心業務邏輯與狀態管理
+     */
+
+    (function () {
+      'use strict';
+
+      // 本機儲存 Key
+      const STORAGE_KEY = 'STUDIO_HUB_DATA_V1';
+      const THEME_KEY = 'STUDIO_HUB_THEME_V1';
+      const SCRATCHPAD_KEY = 'STUDIO_HUB_SCRATCHPAD_V1';
+
+      // 初始預設示範資料
+      const DEFAULT_DATA = {
+        homeworks: [
+          {
+            id: 'hw_1',
+            title: '數位插畫設計 - 期末商業角色提案',
+            deadline: getFutureDate(3, 23, 59),
+            content: '繳交 300dpi CMYK 格式角色三視圖與配件拆件說明，並撰寫 500 字世界觀概念。',
+            progress: '線稿繪製完成，進入底色配置',
+            progressPercent: 60,
+            isCompleted: false,
+            createdAt: new Date().toISOString()
+          },
+          {
+            id: 'hw_2',
+            title: '視覺傳達理論 - 期中研究報告',
+            deadline: getFutureDate(7, 18, 0),
+            content: '分析現代手遊 UI 設計的色彩動線與心理引導案例（需附文獻與截圖）。',
+            progress: '資料收集齊全，簡報架構整理中',
+            progressPercent: 35,
+            isCompleted: false,
+            createdAt: new Date().toISOString()
+          },
+          {
+            id: 'hw_3',
+            title: '當代藝術史 - 展覽心得札記',
+            deadline: getFutureDate(-2, 12, 0),
+            content: '參觀北美館當期展覽，撰寫 1000 字個人省思與作品美感評析。',
+            progress: '已定稿並於校務系統上傳 PDF',
+            progressPercent: 100,
+            isCompleted: true,
+            createdAt: new Date().toISOString()
+          }
+        ],
+        commissions: [
+          {
+            id: 'comm_1',
+            client: '星奈 Kana (@kana_art)',
+            content: 'Vtuber 角色半身主視覺插畫（含透明去背立繪檔與高解析桌面桌布）。',
+            price: 5200,
+            paymentStatus: '已付訂金',
+            progress: '色稿細化中，預計週五提供第二次進度預覽',
+            progressPercent: 70,
+            deadline: getFutureDate(5, 20, 0),
+            isCompleted: false,
+            createdAt: new Date().toISOString()
+          },
+          {
+            id: 'comm_2',
+            client: '林先生 (商業外包)',
+            content: '輕小說封面雙人角色與奇幻背景插畫，需配合出版社標準刀模出血。',
+            price: 12000,
+            paymentStatus: '全額已付',
+            progress: '構圖草稿確認完畢，線稿繪製中',
+            progressPercent: 40,
+            deadline: getFutureDate(14, 23, 59),
+            isCompleted: false,
+            createdAt: new Date().toISOString()
+          },
+          {
+            id: 'comm_3',
+            client: '狐狸喵 (@fox_cat)',
+            content: '社群頭像插畫 (Q版頭貼)',
+            price: 1500,
+            paymentStatus: '未匯款',
+            progress: '確認需求規格與色系中',
+            progressPercent: 15,
+            deadline: getFutureDate(2, 18, 0),
+            isCompleted: false,
+            createdAt: new Date().toISOString()
+          },
+          {
+            id: 'comm_4',
+            client: '阿倫工作室',
+            content: 'Podcast 節目單元 Banner 視覺設計',
+            price: 3600,
+            paymentStatus: '全額已付',
+            progress: '完稿交付所有來源 PSD 與向量檔',
+            progressPercent: 100,
+            deadline: getFutureDate(-5, 17, 0),
+            isCompleted: true,
+            createdAt: new Date().toISOString()
+          }
+        ],
+        ideas: [
+          {
+            id: 'idea_1',
+            title: '蒸氣龐克鐘錶師少女',
+            tag: '角色設定',
+            customTag: '個人創作企劃',
+            content: '背著由黃銅齒輪與真空管構成的巨大發條背包，戴著飛行護目鏡。服裝結合維多利亞時代蕾絲圍裙與工匠皮質圍裙，配色採用復古深棕、古銅金與湖水綠。',
+            isCompleted: false,
+            createdAt: new Date().toISOString()
+          },
+          {
+            id: 'idea_2',
+            title: '賽博龐克夜市老街景觀',
+            tag: '世界觀',
+            customTag: '背景練習',
+            content: '雨夜中反光的柏油路面、空中懸浮的霓虹招牌、紅燈籠被全像投影科技取代。攤販小吃有發光的分子料理小籠包與全息拉麵攤。',
+            isCompleted: false,
+            createdAt: new Date().toISOString()
+          },
+          {
+            id: 'idea_3',
+            title: '黃昏雨後的水坑倒影構圖',
+            tag: '分鏡構圖',
+            customTag: '',
+            content: '主角低頭看著水窪，水窪中倒映出的是另一個奇幻平行世界的自己。天空是紫橙色漸層魔法時刻，微風帶起漣漪。',
+            isCompleted: true,
+            createdAt: new Date().toISOString()
+          }
+        ]
+      };
+
+      // 全域狀態
+      let state = {
+        homeworks: [],
+        commissions: [],
+        ideas: [],
+        currentTab: 'all',
+        searchQuery: '',
+        filters: {
+          homework: 'pending',
+          commission: 'pending',
+          ideas: 'active'
+        }
+      };
+
+      // DOM 元素快取
+      const elements = {
+        // 列表容器
+        homeworkList: document.getElementById('homeworkList'),
+        commissionList: document.getElementById('commissionList'),
+        ideasList: document.getElementById('ideasList'),
+
+        // 計數器
+        homeworkCounter: document.getElementById('homeworkCounter'),
+        commissionCounter: document.getElementById('commissionCounter'),
+        ideasCounter: document.getElementById('ideasCounter'),
+
+        // 頂部統計指標
+        statHwPending: document.getElementById('statHwPending'),
+        statHwDone: document.getElementById('statHwDone'),
+        statCommPending: document.getElementById('statCommPending'),
+        statCommDone: document.getElementById('statCommDone'),
+        statCommPaidAmount: document.getElementById('statCommPaidAmount'),
+        statCommTotalAmount: document.getElementById('statCommTotalAmount'),
+        statIdeaCount: document.getElementById('statIdeaCount'),
+
+        // 搜尋與篩選
+        globalSearchInput: document.getElementById('globalSearchInput'),
+        clearSearchBtn: document.getElementById('clearSearchBtn'),
+        homeworkFilter: document.getElementById('homeworkFilter'),
+        commissionFilter: document.getElementById('commissionFilter'),
+        ideasFilter: document.getElementById('ideasFilter'),
+
+        // 視圖切換
+        viewTabBtns: document.querySelectorAll('.view-tab-btn'),
+        mobileNavItems: document.querySelectorAll('.mobile-nav-item'),
+        sectionsGrid: document.querySelector('.three-sections-grid'),
+        boardColumns: document.querySelectorAll('.board-column'),
+
+        // 外觀與下拉
+        themeToggleBtn: document.getElementById('themeToggleBtn'),
+        moreMenuBtn: document.getElementById('moreMenuBtn'),
+        moreMenuDropdown: document.getElementById('moreMenuDropdown'),
+        exportDataBtn: document.getElementById('exportDataBtn'),
+        importFileInput: document.getElementById('importFileInput'),
+        loadSampleDataBtn: document.getElementById('loadSampleDataBtn'),
+        clearAllDataBtn: document.getElementById('clearAllDataBtn'),
+
+        // 隨手記記事本
+        scratchpadInput: document.getElementById('scratchpadInput'),
+        scratchpadSaveStatus: document.getElementById('scratchpadSaveStatus'),
+        convertScratchpadToCardBtn: document.getElementById('convertScratchpadToCardBtn'),
+        clearScratchpadBtn: document.getElementById('clearScratchpadBtn'),
+
+        // 懸浮新增 FAB
+        mainFabBtn: document.getElementById('mainFabBtn'),
+        fabMenu: document.getElementById('fabMenu'),
+        fabAddHomeworkBtn: document.getElementById('fabAddHomeworkBtn'),
+        fabAddCommissionBtn: document.getElementById('fabAddCommissionBtn'),
+        fabAddIdeaBtn: document.getElementById('fabAddIdeaBtn'),
+
+        // 彈跳視窗與表單
+        homeworkModal: document.getElementById('homeworkModal'),
+        commissionModal: document.getElementById('commissionModal'),
+        ideaModal: document.getElementById('ideaModal'),
+
+        homeworkForm: document.getElementById('homeworkForm'),
+        commissionForm: document.getElementById('commissionForm'),
+        ideaForm: document.getElementById('ideaForm'),
+
+        openAddHomeworkBtn: document.getElementById('openAddHomeworkBtn'),
+        openAddCommissionBtn: document.getElementById('openAddCommissionBtn'),
+        openAddIdeaBtn: document.getElementById('openAddIdeaBtn'),
+
+        // 進度條顯示
+        hwProgressPercent: document.getElementById('hwProgressPercent'),
+        hwPercentDisplay: document.getElementById('hwPercentDisplay'),
+        commProgressPercent: document.getElementById('commProgressPercent'),
+        commPercentDisplay: document.getElementById('commPercentDisplay'),
+
+        // Toast 容器
+        toastContainer: document.getElementById('toastContainer')
+      };
+
+      // ===================================================================
+      // 初始化程序
+      // ===================================================================
+      function init() {
+        initTheme();
+        loadData();
+        initScratchpad();
+        bindEvents();
+        renderAll();
+      }
+
+      // 輔助函式：取得相對於當前時間的日期字串 (YYYY-MM-DDTHH:mm)
+      function getFutureDate(daysOffset, hours = 23, minutes = 59) {
+        const d = new Date();
+        d.setDate(d.getDate() + daysOffset);
+        d.setHours(hours, minutes, 0, 0);
+        return formatDateTimeLocal(d);
+      }
+
+      function formatDateTimeLocal(d) {
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        const hours = String(d.getHours()).padStart(2, '0');
+        const mins = String(d.getMinutes()).padStart(2, '0');
+        return `${year}-${month}-${day}T${hours}:${mins}`;
+      }
+
+      // ===================================================================
+      // 主題 (深色/淺色) 切換
+      // ===================================================================
+      function initTheme() {
+        const savedTheme = localStorage.getItem(THEME_KEY);
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+        setTheme(initialTheme);
+      }
+
+      function setTheme(theme) {
+        document.body.setAttribute('data-theme', theme);
+        localStorage.setItem(THEME_KEY, theme);
+
+        const lightIcon = elements.themeToggleBtn.querySelector('.theme-icon-light');
+        const darkIcon = elements.themeToggleBtn.querySelector('.theme-icon-dark');
+
+        if (theme === 'dark') {
+          lightIcon.style.display = 'none';
+          darkIcon.style.display = 'inline-flex';
+        } else {
+          lightIcon.style.display = 'inline-flex';
+          darkIcon.style.display = 'none';
+        }
+      }
+
+      function toggleTheme() {
+        const current = document.body.getAttribute('data-theme') || 'light';
+        const nextTheme = current === 'dark' ? 'light' : 'dark';
+        setTheme(nextTheme);
+        showToast(nextTheme === 'dark' ? '🌙 已切換為深色模式' : '☀️ 已切換為淺色模式', 'info');
+      }
+
+      // ===================================================================
+      // 本機資料儲存與載入
+      // ===================================================================
+      function loadData() {
+        try {
+          const stored = localStorage.getItem(STORAGE_KEY);
+          if (stored) {
+            const parsed = JSON.parse(stored);
+            state.homeworks = Array.isArray(parsed.homeworks) ? parsed.homeworks : [];
+            state.commissions = Array.isArray(parsed.commissions) ? parsed.commissions : [];
+            state.ideas = Array.isArray(parsed.ideas) ? parsed.ideas : [];
+          } else {
+            // 初次訪問，載入精心設計的範例資料
+            state.homeworks = [...DEFAULT_DATA.homeworks];
+            state.commissions = [...DEFAULT_DATA.commissions];
+            state.ideas = [...DEFAULT_DATA.ideas];
+            saveData();
+          }
+        } catch (e) {
+          console.error('載入資料失敗:', e);
+          state.homeworks = [...DEFAULT_DATA.homeworks];
+          state.commissions = [...DEFAULT_DATA.commissions];
+          state.ideas = [...DEFAULT_DATA.ideas];
+        }
+      }
+
+      function saveData() {
+        try {
+          const dataToSave = {
+            homeworks: state.homeworks,
+            commissions: state.commissions,
+            ideas: state.ideas,
+            updatedAt: new Date().toISOString()
+          };
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+        } catch (e) {
+          console.error('儲存資料失敗:', e);
+          showToast('⚠️ 儲存空間已滿或存取錯誤', 'error');
+        }
+      }
+
+      // ===================================================================
+      // 即時速記記事本 (Scratchpad)
+      // ===================================================================
+      function initScratchpad() {
+        const savedNote = localStorage.getItem(SCRATCHPAD_KEY) || '';
+        elements.scratchpadInput.value = savedNote;
+
+        let timeout = null;
+        elements.scratchpadInput.addEventListener('input', () => {
+          elements.scratchpadSaveStatus.textContent = '儲存中...';
+          clearTimeout(timeout);
+          timeout = setTimeout(() => {
+            localStorage.setItem(SCRATCHPAD_KEY, elements.scratchpadInput.value);
+            elements.scratchpadSaveStatus.textContent = '已同步';
+          }, 400);
+        });
+
+        elements.convertScratchpadToCardBtn.addEventListener('click', () => {
+          const content = elements.scratchpadInput.value.trim();
+          if (!content) {
+            showToast('請先在速記簿輸入內容', 'warning');
+            return;
+          }
+          openIdeaModal(null, content);
+        });
+
+        elements.clearScratchpadBtn.addEventListener('click', () => {
+          if (!elements.scratchpadInput.value.trim()) return;
+          if (confirm('確定要清空靈感速記簿內容嗎？')) {
+            elements.scratchpadInput.value = '';
+            localStorage.setItem(SCRATCHPAD_KEY, '');
+            elements.scratchpadSaveStatus.textContent = '已清空';
+            showToast('速記簿已清空', 'info');
+          }
+        });
+      }
+
+      // ===================================================================
+      // 渲染主流程與數據統計
+      // ===================================================================
+      function renderAll() {
+        renderHomeworks();
+        renderCommissions();
+        renderIdeas();
+        updateOverviewStats();
+      }
+
+      // 更新頂部總覽統計數據
+      function updateOverviewStats() {
+        // 學校作業統計
+        const hwPending = state.homeworks.filter(h => !h.isCompleted).length;
+        const hwDone = state.homeworks.filter(h => h.isCompleted).length;
+        elements.statHwPending.textContent = hwPending;
+        elements.statHwDone.textContent = hwDone;
+        elements.homeworkCounter.textContent = `${hwPending} 進行中`;
+
+        // 委託案統計
+        const commPending = state.commissions.filter(c => !c.isCompleted).length;
+        const commDone = state.commissions.filter(c => c.isCompleted).length;
+        elements.statCommPending.textContent = commPending;
+        elements.statCommDone.textContent = commDone;
+        elements.commissionCounter.textContent = `${commPending} 進行中`;
+
+        // 財務款項統計
+        let totalCommPrice = 0;
+        let paidCommAmount = 0;
+
+        state.commissions.forEach(c => {
+          const price = Number(c.price) || 0;
+          totalCommPrice += price;
+          if (c.paymentStatus === '全額已付') {
+            paidCommAmount += price;
+          } else if (c.paymentStatus === '已付訂金') {
+            paidCommAmount += Math.round(price * 0.5);
+          }
+        });
+
+        elements.statCommPaidAmount.textContent = `$${paidCommAmount.toLocaleString()}`;
+        elements.statCommTotalAmount.textContent = `$${totalCommPrice.toLocaleString()}`;
+
+        // 靈感庫存統計
+        elements.statIdeaCount.textContent = state.ideas.length;
+        elements.ideasCounter.textContent = `${state.ideas.filter(i => !i.isCompleted).length} 則待發想`;
+      }
+
+      // ===================================================================
+      // 第一區：學校作業 渲染
+      // ===================================================================
+      function renderHomeworks() {
+        const filter = state.filters.homework;
+        const q = state.searchQuery.toLowerCase();
+
+        const filtered = state.homeworks.filter(item => {
+          // 搜尋條件
+          if (q && !item.title.toLowerCase().includes(q) && !(item.content || '').toLowerCase().includes(q)) {
+            return false;
+          }
+          // 篩選條件
+          if (filter === 'pending') return !item.isCompleted;
+          if (filter === 'completed') return item.isCompleted;
+          return true;
+        });
+
+        // 排序：未完成在前，且截止日較近在前
+        filtered.sort((a, b) => {
+          if (a.isCompleted !== b.isCompleted) return a.isCompleted ? 1 : -1;
+          return new Date(a.deadline) - new Date(b.deadline);
+        });
+
+        if (filtered.length === 0) {
+          elements.homeworkList.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">📚</div>
+          <div class="empty-state-text">目前沒有符合的學校作業</div>
+          <div class="empty-state-subtext">點擊右上角「新增作業」記錄功課與截止日</div>
+        </div>
+      `;
+          return;
+        }
+
+        elements.homeworkList.innerHTML = filtered.map(item => {
+          const deadlineInfo = formatDeadline(item.deadline, item.isCompleted);
+          const isDone = item.isCompleted;
+          const progressPercent = item.progressPercent || 0;
+
+          return `
+        <article class="item-card ${isDone ? 'is-completed' : ''}" data-id="${item.id}">
+          <div class="card-header-row">
+            <label class="completion-check-box" title="點擊打勾確認完稿結束">
+              <input type="checkbox" class="hw-checkbox" data-id="${item.id}" ${isDone ? 'checked' : ''} aria-label="確認完稿結束">
+            </label>
+            <div class="card-title-content">
+              <h3 class="card-title">${escapeHTML(item.title)}</h3>
+              <div class="badge-group">
+                <span class="badge ${deadlineInfo.badgeClass}">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  截止：${deadlineInfo.displayDate} (${deadlineInfo.relativeText})
+                </span>
+                ${isDone ? '<span class="badge badge-completed">✅ 作業已完稿</span>' : ''}
+              </div>
+            </div>
+          </div>
+
+          ${item.content ? `
+            <div class="card-body">${escapeHTML(item.content)}</div>
+          ` : ''}
+
+          <div class="card-progress-section">
+            <div class="progress-header">
+              <span class="progress-label-text">進度：${escapeHTML(item.progress || (isDone ? '已完成' : '進行中'))}</span>
+              <span>${progressPercent}%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-bar-fill ${isDone ? 'completed-fill' : ''}" style="width: ${progressPercent}%;"></div>
+            </div>
+          </div>
+
+          <div class="card-footer-row">
+            <span>建立於 ${formatShortDate(item.createdAt)}</span>
+            <div class="card-actions-group">
+              <button class="card-action-btn edit-hw-btn" data-id="${item.id}" title="編輯此作業">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                編輯
+              </button>
+              <button class="card-action-btn btn-delete delete-hw-btn" data-id="${item.id}" title="刪除此作業">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                刪除
+              </button>
+            </div>
+          </div>
+        </article>
+      `;
+        }).join('');
+      }
+
+      // ===================================================================
+      // 第二區：委託內容 渲染
+      // ===================================================================
+      function renderCommissions() {
+        const filter = state.filters.commission;
+        const q = state.searchQuery.toLowerCase();
+
+        const filtered = state.commissions.filter(item => {
+          // 搜尋條件
+          if (q && !item.client.toLowerCase().includes(q) && !item.content.toLowerCase().includes(q)) {
+            return false;
+          }
+          // 篩選條件
+          if (filter === 'pending') return !item.isCompleted;
+          if (filter === 'completed') return item.isCompleted;
+          if (filter === 'unpaid') return item.paymentStatus !== '全額已付';
+          return true;
+        });
+
+        // 排序
+        filtered.sort((a, b) => {
+          if (a.isCompleted !== b.isCompleted) return a.isCompleted ? 1 : -1;
+          return new Date(a.deadline) - new Date(b.deadline);
+        });
+
+        if (filtered.length === 0) {
+          elements.commissionList.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">🎨</div>
+          <div class="empty-state-text">目前沒有委託項目</div>
+          <div class="empty-state-subtext">點擊右上角「新增委託」記錄案主與稿件需求</div>
+        </div>
+      `;
+          return;
+        }
+
+        elements.commissionList.innerHTML = filtered.map(item => {
+          const deadlineInfo = formatDeadline(item.deadline, item.isCompleted);
+          const isDone = item.isCompleted;
+          const progressPercent = item.progressPercent || 0;
+          const paymentBadge = getPaymentBadgeInfo(item.paymentStatus);
+
+          return `
+        <article class="item-card ${isDone ? 'is-completed' : ''}" data-id="${item.id}">
+          <div class="card-header-row">
+            <label class="completion-check-box" title="點擊打勾確認完稿結案">
+              <input type="checkbox" class="comm-checkbox" data-id="${item.id}" ${isDone ? 'checked' : ''} aria-label="確認完稿結束">
+            </label>
+            <div class="card-title-content">
+              <h3 class="card-title">委託人：${escapeHTML(item.client)}</h3>
+              <div class="badge-group">
+                <span class="badge badge-price">NT$ ${(Number(item.price) || 0).toLocaleString()}</span>
+                <span class="badge badge-payment ${paymentBadge.className} toggle-payment-btn" data-id="${item.id}" title="點擊可直接切換匯款狀態">
+                  ${paymentBadge.text} ↻
+                </span>
+                <span class="badge ${deadlineInfo.badgeClass}">
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  交稿：${deadlineInfo.displayDate} (${deadlineInfo.relativeText})
+                </span>
+                ${isDone ? '<span class="badge badge-completed">🎉 委託已完稿交付</span>' : ''}
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <strong>委託內容：</strong><br>${escapeHTML(item.content)}
+          </div>
+
+          <div class="card-progress-section">
+            <div class="progress-header">
+              <span class="progress-label-text">進度：${escapeHTML(item.progress || '繪製中')}</span>
+              <span>${progressPercent}%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-bar-fill comm-fill ${isDone ? 'completed-fill' : ''}" style="width: ${progressPercent}%;"></div>
+            </div>
+          </div>
+
+          <div class="card-footer-row">
+            <span>建立於 ${formatShortDate(item.createdAt)}</span>
+            <div class="card-actions-group">
+              <button class="card-action-btn edit-comm-btn" data-id="${item.id}" title="編輯此委託">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                編輯
+              </button>
+              <button class="card-action-btn btn-delete delete-comm-btn" data-id="${item.id}" title="刪除此委託">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                刪除
+              </button>
+            </div>
+          </div>
+        </article>
+      `;
+        }).join('');
+      }
+
+      // ===================================================================
+      // 第三區：靈感題材 渲染
+      // ===================================================================
+      function renderIdeas() {
+        const filter = state.filters.ideas;
+        const q = state.searchQuery.toLowerCase();
+
+        const filtered = state.ideas.filter(item => {
+          // 搜尋條件
+          if (q && !item.title.toLowerCase().includes(q) && !item.content.toLowerCase().includes(q) && !(item.customTag || '').toLowerCase().includes(q)) {
+            return false;
+          }
+          // 篩選條件
+          if (filter === 'active') return !item.isCompleted;
+          if (filter === 'completed') return item.isCompleted;
+          return true;
+        });
+
+        // 排序：最新的靈感在最前面
+        filtered.sort((a, b) => {
+          if (a.isCompleted !== b.isCompleted) return a.isCompleted ? 1 : -1;
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+
+        if (filtered.length === 0) {
+          elements.ideasList.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">💡</div>
+          <div class="empty-state-text">尚無靈感題材卡片</div>
+          <div class="empty-state-subtext">可在上方即時速記，或點擊「靈感卡片」新增</div>
+        </div>
+      `;
+          return;
+        }
+
+        elements.ideasList.innerHTML = filtered.map(item => {
+          const isDone = item.isCompleted;
+          return `
+        <article class="item-card ${isDone ? 'is-completed' : ''}" data-id="${item.id}">
+          <div class="card-header-row">
+            <label class="completion-check-box" title="點擊打勾標記為已採用或完稿">
+              <input type="checkbox" class="idea-checkbox" data-id="${item.id}" ${isDone ? 'checked' : ''} aria-label="確認完稿/採用結束">
+            </label>
+            <div class="card-title-content">
+              <h3 class="card-title">${escapeHTML(item.title)}</h3>
+              <div class="badge-group">
+                <span class="badge badge-idea-tag">🏷️ ${escapeHTML(item.tag || '靈感')}</span>
+                ${item.customTag ? `<span class="badge badge-idea-tag">#${escapeHTML(item.customTag)}</span>` : ''}
+                ${isDone ? '<span class="badge badge-completed">✨ 已採用完稿</span>' : ''}
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body">${escapeHTML(item.content)}</div>
+
+          <div class="card-footer-row">
+            <span>紀錄於 ${formatShortDate(item.createdAt)}</span>
+            <div class="card-actions-group">
+              <button class="card-action-btn edit-idea-btn" data-id="${item.id}" title="編輯靈感">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                編輯
+              </button>
+              <button class="card-action-btn btn-delete delete-idea-btn" data-id="${item.id}" title="刪除靈感">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                刪除
+              </button>
+            </div>
+          </div>
+        </article>
+      `;
+        }).join('');
+      }
+
+      // ===================================================================
+      // 截止日期格式化與倒數計算
+      // ===================================================================
+      function formatDeadline(deadlineStr, isCompleted) {
+        if (!deadlineStr) {
+          return { displayDate: '未設定', relativeText: '無期限', badgeClass: 'badge-deadline' };
+        }
+
+        const target = new Date(deadlineStr);
+        const now = new Date();
+        const diffMs = target - now;
+        const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+        const month = target.getMonth() + 1;
+        const date = target.getDate();
+        const hours = String(target.getHours()).padStart(2, '0');
+        const mins = String(target.getMinutes()).padStart(2, '0');
+        const displayDate = `${month}/${date} ${hours}:${mins}`;
+
+        if (isCompleted) {
+          return { displayDate, relativeText: '已結束', badgeClass: 'badge-deadline' };
+        }
+
+        if (diffMs < 0) {
+          const overdueDays = Math.abs(diffDays);
+          return {
+            displayDate,
+            relativeText: overdueDays === 0 ? '剛剛逾期' : `逾期 ${overdueDays} 天`,
+            badgeClass: 'badge-urgent'
+          };
+        } else if (diffDays <= 0 || (diffDays === 1 && target.getDate() === now.getDate())) {
+          return { displayDate, relativeText: '🔥 今天截止', badgeClass: 'badge-urgent' };
+        } else if (diffDays === 1) {
+          return { displayDate, relativeText: '⏳ 明天截止', badgeClass: 'badge-urgent' };
+        } else if (diffDays <= 3) {
+          return { displayDate, relativeText: `剩餘 ${diffDays} 天`, badgeClass: 'badge-warning' };
+        } else {
+          return { displayDate, relativeText: `剩餘 ${diffDays} 天`, badgeClass: 'badge-deadline' };
+        }
+      }
+
+      function getPaymentBadgeInfo(status) {
+        switch (status) {
+          case '全額已付':
+            return { text: '✅ 全額已付', className: 'payment-paid' };
+          case '已付訂金':
+            return { text: '⏳ 已付訂金 (50%)', className: 'payment-deposit' };
+          case '未匯款':
+          default:
+            return { text: '❌ 未匯款', className: 'payment-unpaid' };
+        }
+      }
+
+      function cyclePaymentStatus(currentStatus) {
+        if (currentStatus === '未匯款') return '已付訂金';
+        if (currentStatus === '已付訂金') return '全額已付';
+        return '未匯款';
+      }
+
+      function formatShortDate(isoString) {
+        if (!isoString) return '';
+        const d = new Date(isoString);
+        return `${d.getMonth() + 1}/${d.getDate()}`;
+      }
+
+      function escapeHTML(str) {
+        if (!str) return '';
+        return str
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      // ===================================================================
+      // 視圖標籤與手機導航切換
+      // ===================================================================
+      function setTab(tabKey) {
+        state.currentTab = tabKey;
+
+        // 更新 Desktop View Tabs
+        elements.viewTabBtns.forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.tab === tabKey);
+          btn.setAttribute('aria-selected', btn.dataset.tab === tabKey);
+        });
+
+        // 更新 Mobile Bottom Bar
+        elements.mobileNavItems.forEach(item => {
+          item.classList.toggle('active', item.dataset.nav === tabKey);
+        });
+
+        // 依據選取的 Tab 切換欄位顯示
+        if (tabKey === 'all') {
+          elements.boardColumns.forEach(col => {
+            col.style.display = 'flex';
+          });
+        } else {
+          elements.boardColumns.forEach(col => {
+            if (col.id === tabKey) {
+              col.style.display = 'flex';
+              col.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+              col.style.display = 'none';
+            }
+          });
+        }
+      }
+
+      // ===================================================================
+      // 彈跳視窗控制 (Modal Functions)
+      // ===================================================================
+      function openModal(modalEl) {
+        modalEl.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal(modalEl) {
+        modalEl.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      // 作業 Modal 打開
+      function openHomeworkModal(editId = null) {
+        elements.hwProgressPercent.value = 0;
+        elements.hwPercentDisplay.textContent = '0';
+
+        if (editId) {
+          const item = state.homeworks.find(h => h.id === editId);
+          if (!item) return;
+          document.getElementById('hwModalTitle').textContent = '編輯學校作業';
+          document.getElementById('hwEditId').value = item.id;
+          document.getElementById('hwTitle').value = item.title;
+          document.getElementById('hwDeadline').value = item.deadline;
+          document.getElementById('hwContent').value = item.content || '';
+          document.getElementById('hwProgress').value = item.progress || '';
+          document.getElementById('hwProgressPercent').value = item.progressPercent || 0;
+          elements.hwPercentDisplay.textContent = item.progressPercent || 0;
+          document.getElementById('hwIsCompleted').checked = !!item.isCompleted;
+        } else {
+          document.getElementById('hwModalTitle').textContent = '新增學校作業';
+          elements.homeworkForm.reset();
+          document.getElementById('hwEditId').value = '';
+          document.getElementById('hwDeadline').value = getFutureDate(3, 23, 59);
+          document.getElementById('hwProgress').value = '未開始';
+          elements.hwProgressPercent.value = 0;
+          elements.hwPercentDisplay.textContent = '0';
+        }
+        openModal(elements.homeworkModal);
+      }
+
+      // 委託 Modal 打開
+      function openCommissionModal(editId = null) {
+        elements.commProgressPercent.value = 10;
+        elements.commPercentDisplay.textContent = '10';
+
+        if (editId) {
+          const item = state.commissions.find(c => c.id === editId);
+          if (!item) return;
+          document.getElementById('commModalTitle').textContent = '編輯委託案件';
+          document.getElementById('commEditId').value = item.id;
+          document.getElementById('commClient').value = item.client;
+          document.getElementById('commPrice').value = item.price || '';
+          document.getElementById('commContent').value = item.content;
+          document.getElementById('commPaymentStatus').value = item.paymentStatus || '未匯款';
+          document.getElementById('commDeadline').value = item.deadline;
+          document.getElementById('commProgress').value = item.progress || '';
+          document.getElementById('commProgressPercent').value = item.progressPercent || 0;
+          elements.commPercentDisplay.textContent = item.progressPercent || 0;
+          document.getElementById('commIsCompleted').checked = !!item.isCompleted;
+        } else {
+          document.getElementById('commModalTitle').textContent = '新增委託案件';
+          elements.commissionForm.reset();
+          document.getElementById('commEditId').value = '';
+          document.getElementById('commDeadline').value = getFutureDate(7, 20, 0);
+          document.getElementById('commProgress').value = '草稿階段';
+          document.getElementById('commPaymentStatus').value = '未匯款';
+          elements.commProgressPercent.value = 10;
+          elements.commPercentDisplay.textContent = '10';
+        }
+        openModal(elements.commissionModal);
+      }
+
+      // 靈感 Modal 打開
+      function openIdeaModal(editId = null, prefillContent = '') {
+        if (editId) {
+          const item = state.ideas.find(i => i.id === editId);
+          if (!item) return;
+          document.getElementById('ideaModalTitle').textContent = '編輯靈感卡片';
+          document.getElementById('ideaEditId').value = item.id;
+          document.getElementById('ideaTitle').value = item.title;
+          document.getElementById('ideaTag').value = item.tag || '角色設定';
+          document.getElementById('ideaCustomTag').value = item.customTag || '';
+          document.getElementById('ideaContent').value = item.content;
+          document.getElementById('ideaIsCompleted').checked = !!item.isCompleted;
+        } else {
+          document.getElementById('ideaModalTitle').textContent = '新增靈感題材卡片';
+          elements.ideaForm.reset();
+          document.getElementById('ideaEditId').value = '';
+          if (prefillContent) {
+            document.getElementById('ideaTitle').value = prefillContent.slice(0, 15) + (prefillContent.length > 15 ? '...' : '');
+            document.getElementById('ideaContent').value = prefillContent;
+          }
+        }
+        openModal(elements.ideaModal);
+      }
+
+      // ===================================================================
+      // Toast 通知顯示
+      // ===================================================================
+      function showToast(message, type = 'success') {
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.textContent = message;
+
+        elements.toastContainer.appendChild(toast);
+
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateY(10px) scale(0.9)';
+          setTimeout(() => {
+            if (toast.parentNode) {
+              toast.parentNode.removeChild(toast);
+            }
+          }, 250);
+        }, 2800);
+      }
+
+      // ===================================================================
+      // 事件監聽與綁定
+      // ===================================================================
+      function bindEvents() {
+        // 1. 主題切換按鈕
+        elements.themeToggleBtn.addEventListener('click', toggleTheme);
+
+        // 2. 搜尋列即時輸入
+        elements.globalSearchInput.addEventListener('input', (e) => {
+          state.searchQuery = e.target.value.trim();
+          elements.clearSearchBtn.style.display = state.searchQuery ? 'block' : 'none';
+          renderAll();
+        });
+
+        elements.clearSearchBtn.addEventListener('click', () => {
+          elements.globalSearchInput.value = '';
+          state.searchQuery = '';
+          elements.clearSearchBtn.style.display = 'none';
+          renderAll();
+        });
+
+        // 3. 欄位內部篩選下拉選單
+        elements.homeworkFilter.addEventListener('change', (e) => {
+          state.filters.homework = e.target.value;
+          renderHomeworks();
+        });
+
+        elements.commissionFilter.addEventListener('change', (e) => {
+          state.filters.commission = e.target.value;
+          renderCommissions();
+        });
+
+        elements.ideasFilter.addEventListener('change', (e) => {
+          state.filters.ideas = e.target.value;
+          renderIdeas();
+        });
+
+        // 4. 視圖 Tab 切換 (Desktop & Mobile)
+        elements.viewTabBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            setTab(btn.dataset.tab);
+          });
+        });
+
+        elements.mobileNavItems.forEach(item => {
+          item.addEventListener('click', () => {
+            setTab(item.dataset.nav);
+          });
+        });
+
+        // 5. 更多設定下拉選單
+        elements.moreMenuBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          elements.moreMenuDropdown.classList.toggle('show');
+        });
+
+        document.addEventListener('click', (e) => {
+          if (!elements.moreMenuDropdown.contains(e.target) && e.target !== elements.moreMenuBtn) {
+            elements.moreMenuDropdown.classList.remove('show');
+          }
+          if (!elements.fabMenu.contains(e.target) && e.target !== elements.mainFabBtn && !elements.mainFabBtn.contains(e.target)) {
+            elements.fabMenu.classList.remove('show');
+            elements.mainFabBtn.classList.remove('active');
+          }
+        });
+
+        // 6. 懸浮按鈕 FAB 控制
+        elements.mainFabBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          elements.fabMenu.classList.toggle('show');
+          elements.mainFabBtn.classList.toggle('active');
+        });
+
+        elements.fabAddHomeworkBtn.addEventListener('click', () => {
+          elements.fabMenu.classList.remove('show');
+          elements.mainFabBtn.classList.remove('active');
+          openHomeworkModal();
+        });
+
+        elements.fabAddCommissionBtn.addEventListener('click', () => {
+          elements.fabMenu.classList.remove('show');
+          elements.mainFabBtn.classList.remove('active');
+          openCommissionModal();
+        });
+
+        elements.fabAddIdeaBtn.addEventListener('click', () => {
+          elements.fabMenu.classList.remove('show');
+          elements.mainFabBtn.classList.remove('active');
+          openIdeaModal();
+        });
+
+        // 7. 新增按鈕綁定 (欄位頂部按鈕)
+        elements.openAddHomeworkBtn.addEventListener('click', () => openHomeworkModal());
+        elements.openAddCommissionBtn.addEventListener('click', () => openCommissionModal());
+        elements.openAddIdeaBtn.addEventListener('click', () => openIdeaModal());
+
+        // 8. 關閉 Modal 通用按鈕與背景點擊
+        document.querySelectorAll('[data-close-modal]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const modalId = btn.getAttribute('data-close-modal');
+            const modal = document.getElementById(modalId);
+            if (modal) closeModal(modal);
+          });
+        });
+
+        [elements.homeworkModal, elements.commissionModal, elements.ideaModal].forEach(modal => {
+          modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+              closeModal(modal);
+            }
+          });
+        });
+
+        // 9. 進度條 Range 滑桿數字同步顯示
+        elements.hwProgressPercent.addEventListener('input', (e) => {
+          elements.hwPercentDisplay.textContent = e.target.value;
+          const completedCheckbox = document.getElementById('hwIsCompleted');
+          if (Number(e.target.value) === 100) {
+            completedCheckbox.checked = true;
+          }
+        });
+
+        elements.commProgressPercent.addEventListener('input', (e) => {
+          elements.commPercentDisplay.textContent = e.target.value;
+          const completedCheckbox = document.getElementById('commIsCompleted');
+          if (Number(e.target.value) === 100) {
+            completedCheckbox.checked = true;
+          }
+        });
+
+        // 10. 表單提交：學校作業
+        elements.homeworkForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const editId = document.getElementById('hwEditId').value;
+          const isCompleted = document.getElementById('hwIsCompleted').checked;
+          let progressPercent = Number(elements.hwProgressPercent.value);
+          if (isCompleted && progressPercent < 100) {
+            progressPercent = 100;
+          }
+
+          const itemData = {
+            title: document.getElementById('hwTitle').value.trim(),
+            deadline: document.getElementById('hwDeadline').value,
+            content: document.getElementById('hwContent').value.trim(),
+            progress: document.getElementById('hwProgress').value.trim() || (isCompleted ? '已完稿' : '進行中'),
+            progressPercent: progressPercent,
+            isCompleted: isCompleted,
+            updatedAt: new Date().toISOString()
+          };
+
+          if (editId) {
+            const idx = state.homeworks.findIndex(h => h.id === editId);
+            if (idx !== -1) {
+              state.homeworks[idx] = { ...state.homeworks[idx], ...itemData };
+              showToast('已更新學校作業', 'success');
+            }
+          } else {
+            itemData.id = 'hw_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+            itemData.createdAt = new Date().toISOString();
+            state.homeworks.unshift(itemData);
+            showToast('已新增學校作業', 'success');
+          }
+
+          saveData();
+          renderAll();
+          closeModal(elements.homeworkModal);
+        });
+
+        // 11. 表單提交：委託案件
+        elements.commissionForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const editId = document.getElementById('commEditId').value;
+          const isCompleted = document.getElementById('commIsCompleted').checked;
+          let progressPercent = Number(elements.commProgressPercent.value);
+          if (isCompleted && progressPercent < 100) {
+            progressPercent = 100;
+          }
+
+          const itemData = {
+            client: document.getElementById('commClient').value.trim(),
+            price: Number(document.getElementById('commPrice').value) || 0,
+            content: document.getElementById('commContent').value.trim(),
+            paymentStatus: document.getElementById('commPaymentStatus').value,
+            deadline: document.getElementById('commDeadline').value,
+            progress: document.getElementById('commProgress').value.trim() || (isCompleted ? '已交付' : '進行中'),
+            progressPercent: progressPercent,
+            isCompleted: isCompleted,
+            updatedAt: new Date().toISOString()
+          };
+
+          if (editId) {
+            const idx = state.commissions.findIndex(c => c.id === editId);
+            if (idx !== -1) {
+              state.commissions[idx] = { ...state.commissions[idx], ...itemData };
+              showToast('已更新委託案件', 'success');
+            }
+          } else {
+            itemData.id = 'comm_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+            itemData.createdAt = new Date().toISOString();
+            state.commissions.unshift(itemData);
+            showToast('已新增委託案件', 'success');
+          }
+
+          saveData();
+          renderAll();
+          closeModal(elements.commissionModal);
+        });
+
+        // 12. 表單提交：靈感題材
+        elements.ideaForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const editId = document.getElementById('ideaEditId').value;
+          const isCompleted = document.getElementById('ideaIsCompleted').checked;
+
+          const itemData = {
+            title: document.getElementById('ideaTitle').value.trim(),
+            tag: document.getElementById('ideaTag').value,
+            customTag: document.getElementById('ideaCustomTag').value.trim(),
+            content: document.getElementById('ideaContent').value.trim(),
+            isCompleted: isCompleted,
+            updatedAt: new Date().toISOString()
+          };
+
+          if (editId) {
+            const idx = state.ideas.findIndex(i => i.id === editId);
+            if (idx !== -1) {
+              state.ideas[idx] = { ...state.ideas[idx], ...itemData };
+              showToast('已更新靈感卡片', 'success');
+            }
+          } else {
+            itemData.id = 'idea_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+            itemData.createdAt = new Date().toISOString();
+            state.ideas.unshift(itemData);
+            showToast('已建立靈感卡片', 'success');
+          }
+
+          saveData();
+          renderAll();
+          closeModal(elements.ideaModal);
+        });
+
+        // 13. 事件委派：打勾方格 (完稿結束確認) 與卡片內部操作
+        // 學校作業卡片
+        elements.homeworkList.addEventListener('click', (e) => {
+          const target = e.target;
+
+          // 方格打勾 (完稿)
+          if (target.classList.contains('hw-checkbox')) {
+            const id = target.dataset.id;
+            const item = state.homeworks.find(h => h.id === id);
+            if (item) {
+              item.isCompleted = target.checked;
+              if (item.isCompleted) {
+                item.progressPercent = 100;
+                item.progress = '已完稿';
+                showToast(`🎉 作業「${item.title}」已標記為完稿！`, 'success');
+              } else {
+                item.progressPercent = 50;
+                item.progress = '修改中';
+                showToast(`作業「${item.title}」已恢復進行中`, 'info');
+              }
+              saveData();
+              renderAll();
+            }
+            return;
+          }
+
+          // 編輯作業
+          const editBtn = target.closest('.edit-hw-btn');
+          if (editBtn) {
+            openHomeworkModal(editBtn.dataset.id);
+            return;
+          }
+
+          // 刪除作業
+          const deleteBtn = target.closest('.delete-hw-btn');
+          if (deleteBtn) {
+            const id = deleteBtn.dataset.id;
+            const item = state.homeworks.find(h => h.id === id);
+            if (item && confirm(`確定要刪除作業「${item.title}」嗎？`)) {
+              state.homeworks = state.homeworks.filter(h => h.id !== id);
+              saveData();
+              renderAll();
+              showToast('作業已刪除', 'info');
+            }
+            return;
+          }
+        });
+
+        // 委託案件卡片
+        elements.commissionList.addEventListener('click', (e) => {
+          const target = e.target;
+
+          // 方格打勾 (完稿結案)
+          if (target.classList.contains('comm-checkbox')) {
+            const id = target.dataset.id;
+            const item = state.commissions.find(c => c.id === id);
+            if (item) {
+              item.isCompleted = target.checked;
+              if (item.isCompleted) {
+                item.progressPercent = 100;
+                item.progress = '完稿交付';
+                showToast(`✨ 委託人「${item.client}」的案件已標記為完稿結案！`, 'success');
+              } else {
+                item.progressPercent = 50;
+                showToast(`案件已恢復為進行中`, 'info');
+              }
+              saveData();
+              renderAll();
+            }
+            return;
+          }
+
+          // 快速切換匯款狀態
+          const togglePayBtn = target.closest('.toggle-payment-btn');
+          if (togglePayBtn) {
+            const id = togglePayBtn.dataset.id;
+            const item = state.commissions.find(c => c.id === id);
+            if (item) {
+              item.paymentStatus = cyclePaymentStatus(item.paymentStatus);
+              saveData();
+              renderAll();
+              showToast(`已切換匯款狀態為：${item.paymentStatus}`, 'info');
+            }
+            return;
+          }
+
+          // 編輯委託
+          const editBtn = target.closest('.edit-comm-btn');
+          if (editBtn) {
+            openCommissionModal(editBtn.dataset.id);
+            return;
+          }
+
+          // 刪除委託
+          const deleteBtn = target.closest('.delete-comm-btn');
+          if (deleteBtn) {
+            const id = deleteBtn.dataset.id;
+            const item = state.commissions.find(c => c.id === id);
+            if (item && confirm(`確定要刪除案主「${item.client}」的委託嗎？`)) {
+              state.commissions = state.commissions.filter(c => c.id !== id);
+              saveData();
+              renderAll();
+              showToast('委託案件已刪除', 'info');
+            }
+            return;
+          }
+        });
+
+        // 靈感題材卡片
+        elements.ideasList.addEventListener('click', (e) => {
+          const target = e.target;
+
+          // 方格打勾 (已採用/完稿)
+          if (target.classList.contains('idea-checkbox')) {
+            const id = target.dataset.id;
+            const item = state.ideas.find(i => i.id === id);
+            if (item) {
+              item.isCompleted = target.checked;
+              saveData();
+              renderAll();
+              showToast(item.isCompleted ? '💡 靈感已標記為完稿/已採用！' : '靈感標記為未完結', 'info');
+            }
+            return;
+          }
+
+          // 編輯靈感
+          const editBtn = target.closest('.edit-idea-btn');
+          if (editBtn) {
+            openIdeaModal(editBtn.dataset.id);
+            return;
+          }
+
+          // 刪除靈感
+          const deleteBtn = target.closest('.delete-idea-btn');
+          if (deleteBtn) {
+            const id = deleteBtn.dataset.id;
+            const item = state.ideas.find(i => i.id === id);
+            if (item && confirm(`確定要刪除靈感「${item.title}」嗎？`)) {
+              state.ideas = state.ideas.filter(i => i.id !== id);
+              saveData();
+              renderAll();
+              showToast('靈感卡片已刪除', 'info');
+            }
+            return;
+          }
+        });
+
+        // 14. 備份匯出 JSON
+        elements.exportDataBtn.addEventListener('click', () => {
+          elements.moreMenuDropdown.classList.remove('show');
+          const backupData = {
+            app: 'Task & Studio Hub',
+            version: '1.0',
+            exportedAt: new Date().toISOString(),
+            homeworks: state.homeworks,
+            commissions: state.commissions,
+            ideas: state.ideas,
+            scratchpad: localStorage.getItem(SCRATCHPAD_KEY) || ''
+          };
+          const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `StudioHub_Backup_${new Date().toISOString().slice(0, 10)}.json`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          showToast('📥 備份資料已成功匯出', 'success');
+        });
+
+        // 15. 備份匯入 JSON
+        elements.importFileInput.addEventListener('change', (e) => {
+          elements.moreMenuDropdown.classList.remove('show');
+          const file = e.target.files[0];
+          if (!file) return;
+
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            try {
+              const imported = JSON.parse(event.target.result);
+              if (imported.homeworks || imported.commissions || imported.ideas) {
+                state.homeworks = imported.homeworks || [];
+                state.commissions = imported.commissions || [];
+                state.ideas = imported.ideas || [];
+                if (imported.scratchpad) {
+                  elements.scratchpadInput.value = imported.scratchpad;
+                  localStorage.setItem(SCRATCHPAD_KEY, imported.scratchpad);
+                }
+                saveData();
+                renderAll();
+                showToast('✅ 備份資料已順利還原匯入！', 'success');
+              } else {
+                showToast('⚠️ 檔案格式不符合備份規範', 'error');
+              }
+            } catch (err) {
+              showToast('⚠️ JSON 解析失敗，請確認檔案格式', 'error');
+            }
+          };
+          reader.readAsText(file);
+          e.target.value = '';
+        });
+
+        // 16. 載入預設示範資料
+        elements.loadSampleDataBtn.addEventListener('click', () => {
+          elements.moreMenuDropdown.classList.remove('show');
+          if (confirm('確定要載入預設範例資料嗎？（這將會合併新增範例項目）')) {
+            state.homeworks = [...DEFAULT_DATA.homeworks, ...state.homeworks];
+            state.commissions = [...DEFAULT_DATA.commissions, ...state.commissions];
+            state.ideas = [...DEFAULT_DATA.ideas, ...state.ideas];
+            saveData();
+            renderAll();
+            showToast('已載入範例資料', 'success');
+          }
+        });
+
+        // 17. 清空所有資料
+        elements.clearAllDataBtn.addEventListener('click', () => {
+          elements.moreMenuDropdown.classList.remove('show');
+          if (confirm('⚠️ 警告：這將會清除您所有的作業、委託與靈感資料！確定要重置嗎？')) {
+            state.homeworks = [];
+            state.commissions = [];
+            state.ideas = [];
+            saveData();
+            renderAll();
+            showToast('已清空所有看板資料', 'warning');
+          }
+        });
+
+        // 18. ESC 鍵快速關閉所有 Modal
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            closeModal(elements.homeworkModal);
+            closeModal(elements.commissionModal);
+            closeModal(elements.ideaModal);
+            elements.moreMenuDropdown.classList.remove('show');
+            elements.fabMenu.classList.remove('show');
+            elements.mainFabBtn.classList.remove('active');
+          }
+        });
+      }
+
+      // 啟動應用
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+
+  </script>
+</body>
+
+</html>
